@@ -1,0 +1,76 @@
+---
+name: chicken-farming-carousel-concept
+description: Use when the user wants the concept/idea/wording for an Instagram carousel or slider of statistics about intensive chicken, hen, broiler, layer or poultry farming for a specific country (e.g. "come up with a carousel about chicken farming in X", "draft a slider concept on egg-farming stats"). Produces ALA-style slide copy only — NOT the built carousel, design, or HTML.
+---
+
+# Chicken Farming Carousel Concept
+
+## Overview
+
+Produces the **concept and wording** for a 3–5 slide Instagram carousel exposing intensive chicken/hen farming in one country, for ALA (Accountability Lens Asia). Output is the slide copy/idea only — **not** the built carousel: no HTML, no design, no images. Hand the finished wording to the `design_system/` templates as a separate step.
+
+Core principle: **every slide opens with a striking, individually-counted number from a verifiable source, and the whole carousel tells one coherent story.**
+
+## Workflow
+
+Follow these seven steps in order. Steps marked **[ASK]** require the user; steps marked **[AUTO]** run without asking for validation.
+
+1. **[ASK] Get the country.** Ask which country the carousel is about. Ask nothing else yet.
+2. **[AUTO] Research stats.** Find verified statistics about intensive chicken/hen farming in that country (see *Sourcing rules*). Aim for ~15–20 candidate stats across sub-topics.
+3. **[ASK] Display stats, get the anchor.** Present the verified stats (with sources). Ask the user to pick **one** stat to build the carousel around. The rest of your research stays available for supporting slides.
+4. **[AUTO] Build the 3–5 slide concept.** Build the slider around the anchor stat, using other researched stats **only if they closely relate** and form one narrative (see *Slide rules*). Do not ask for validation.
+5. **[AUTO] Self-check numbers + metaphors.** Verify each slide opens with a striking number and that any metaphor is clear, accurate, and non-objectifying (see *Metaphor rules*). Fix silently.
+6. **[AUTO] Tighten the language.** Proofread: cut editorializing and adjectives, keep declarative sentences, lead with the fact. Do not ask for validation.
+7. **[ASK] Present** the finalized slider wording.
+
+## Sourcing rules (Step 2)
+
+For **each** stat, record: the number, the source organisation, a working URL, the year, and a one-line confidence note.
+
+- **Count individual animals, never tonnage.** Reject "X tonnes of poultry/meat" framing — it objectifies animals as product. Convert to or find per-individual counts ("X million chickens slaughtered").
+- **Prefer reputable sources:** FAO / FAOSTAT, Our World in Data, World Bank, OECD-FAO Agricultural Outlook, USDA FAS GAIN, the country's national statistics office, peer-reviewed journals (PubMed/PMC), World Animal Protection, Open Wing Alliance, Sinergia Animal, Humane World/Humane League.
+- **Cross-check** headline numbers across sources. **Flag** anything you cannot verify and **do not use it.**
+- **Note Vietnam-style scope traps:** a regional ("Asia") or global figure is fine as *context* but must be labelled as such — never present it as a country-specific number.
+- **Efficiency:** dispatch parallel research agents across sub-topics — *layer hens*, *broilers/meat birds*, *welfare/disease/antibiotics*, *industry scale/growth* — then merge. See superpowers:dispatching-parallel-agents.
+
+## Slide rules (Step 4)
+
+- **3–5 slides**, one clear idea each.
+- **Lead every slide with the core number** as the headline — a number, not a word or a metaphor.
+- **One coherent story.** Pick stats that fit a single arc (e.g. one bird's life: *scale → confinement → growth/age → mortality → consequence*). Don't mix a layer-hen arc and a broiler arc unless you frame them as one story; drop the strongest stray stat rather than break coherence.
+- **Never repeat a stat.** The only exception: restating one stat as an equivalent/metaphor on the same slide.
+- **End on consequence + CTA** (why it matters beyond the animals; a follow prompt).
+- **Add a small source attribution line** under each slide.
+
+## Metaphor rules (Step 5)
+
+Use a metaphor **only when a raw number is hard to grasp** — at most one per slide.
+
+- **Allowed:** comparisons of **space, time, scale, or proportion** — things done *to* or taken *from* the animals.
+  - Space: cage/floor area vs a sheet of A4 paper (~625 cm²).
+  - Scale: per-second or per-person rates.
+  - Time/age: slaughter age vs natural lifespan, scaled to a human age.
+- **Forbidden:** objectifying/commodity comparisons that reduce a living animal to a product or thing (e.g. "weighs as much as X bags of sugar," "as many as X soda cans"). These degrade the animals.
+- **Be arithmetically honest:** every metaphor must be accurate and conservative. Do the math before writing it.
+
+## Example (finished slide)
+
+> # 687 million
+> **chickens were slaughtered in Vietnam in 2024 — about 22 every second.**
+>
+> The number rises every year.
+>
+> <sub>Source: Our World in Data / UN FAOSTAT, 2024</sub>
+
+Number-first headline · individual-bird count · honest scale metaphor ("22 every second") · short source line.
+
+## Common mistakes
+
+| Mistake | Fix |
+|---|---|
+| Leading a slide with a sentence or metaphor | Lead with the number, every time |
+| Tonnage / "meat" framing | Count individual birds |
+| Mixing unrelated stats | Keep one narrative; drop strays |
+| Objectifying metaphor (bags of sugar, cans) | Compare space/time/scale/proportion only |
+| Using an unverifiable or region-wide number as country-specific | Verify + label scope, or drop it |
+| Asking the user to validate steps 4–6 | Those steps are autonomous |

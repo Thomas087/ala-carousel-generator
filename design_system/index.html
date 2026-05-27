@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALA — Carousel Design System</title>
+  <link rel="stylesheet" href="css/design-system.css">
+  <style>
+    :root { --page-bg: #0A1729; --card: #112340; --hair: #20335280; }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      color: var(--ala-white);
+      font-family: var(--ala-font-body);
+      -webkit-font-smoothing: antialiased;
+    }
+    /* faint brand grid behind the whole page */
+    body::before {
+      content: "";
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(var(--ala-navy-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--ala-navy-grid) 1px, transparent 1px);
+      background-size: 140px 140px;
+      opacity: .25;
+    }
+    .wrap { position: relative; z-index: 1; max-width: 1120px; margin: 0 auto; padding: 0 40px 120px; }
+
+    /* ---- entrance animation ---- */
+    @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+    .rise { animation: rise .7s cubic-bezier(.2,.7,.2,1) both; }
+
+    /* ---- header ---- */
+    header { padding: 90px 0 70px; }
+    header img { width: 132px; display: block; margin-bottom: 34px; }
+    h1.title {
+      font-family: var(--ala-font-display);
+      font-size: clamp(48px, 8vw, 104px);
+      line-height: .9; margin: 0; text-transform: uppercase;
+      color: var(--ala-yellow);
+    }
+    h1.title .sub { display: block; color: var(--ala-white); }
+    header p.lede { max-width: 620px; margin: 28px 0 0; font-size: 19px; line-height: 1.6; color: #C7D1E0; }
+
+    /* ---- section scaffolding ---- */
+    section { padding-top: 86px; }
+    .kicker {
+      font-family: var(--ala-font-body); font-weight: 600; letter-spacing: 3px;
+      text-transform: uppercase; font-size: 13px; color: var(--ala-yellow); margin: 0 0 6px;
+    }
+    h2.sec {
+      font-family: var(--ala-font-display); text-transform: uppercase;
+      font-size: clamp(30px, 4vw, 46px); margin: 0 0 30px; color: var(--ala-white); line-height: 1;
+    }
+
+    /* ---- palette ---- */
+    .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 18px; }
+    .swatch {
+      border-radius: 16px; overflow: hidden; background: var(--card);
+      border: 1px solid var(--hair);
+    }
+    .swatch .chip { height: 128px; }
+    .swatch .meta { padding: 16px 18px 18px; }
+    .swatch .name { font-weight: 600; font-size: 15px; }
+    .swatch .token { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 13px; color: #8FA1BC; margin-top: 4px; }
+    .swatch .use { font-size: 13px; color: #A9B6C9; margin-top: 10px; line-height: 1.45; }
+
+    /* ---- type ---- */
+    .type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+    @media (max-width: 760px) { .type-grid { grid-template-columns: 1fr; } }
+    .type-card { background: var(--card); border: 1px solid var(--hair); border-radius: 16px; padding: 30px 32px 34px; }
+    .type-card .role { font-size: 13px; letter-spacing: 2px; text-transform: uppercase; color: #8FA1BC; font-weight: 600; }
+    .type-card .fname { font-size: 15px; color: var(--ala-yellow); margin-top: 6px; font-weight: 600; }
+    .specimen-display { font-family: var(--ala-font-display); font-size: 78px; line-height: 1; margin: 22px 0 8px; color: var(--ala-white); }
+    .specimen-body { font-family: var(--ala-font-body); font-size: 40px; line-height: 1.1; margin: 22px 0 8px; color: var(--ala-white); }
+    .glyphs { color: #9DB0CC; font-size: 18px; letter-spacing: 1px; }
+    .scale { list-style: none; padding: 0; margin: 26px 0 0; }
+    .scale li { display: flex; align-items: baseline; gap: 18px; padding: 12px 0; border-top: 1px solid var(--hair); }
+    .scale li:first-child { border-top: 0; }
+    .scale .lbl { width: 120px; flex: none; color: #8FA1BC; font-size: 13px; font-family: ui-monospace, Menlo, monospace; }
+    .scale .px { width: 70px; flex: none; color: var(--ala-yellow); font-size: 14px; }
+    .scale .ex { font-family: var(--ala-font-display); color: var(--ala-white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    /* ---- components ---- */
+    .comp-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; }
+    @media (max-width: 760px) { .comp-grid { grid-template-columns: 1fr; } }
+    .comp {
+      background: var(--ala-navy); border: 1px solid var(--hair); border-radius: 16px;
+      padding: 30px; position: relative; overflow: hidden; min-height: 200px;
+      display: flex; flex-direction: column; justify-content: center;
+    }
+    .comp .tag {
+      position: absolute; top: 14px; left: 16px; font-size: 11px; letter-spacing: 2px;
+      text-transform: uppercase; color: #6E7E97; font-weight: 600; font-family: ui-monospace, Menlo, monospace;
+    }
+
+    /* ---- templates ---- */
+    .tpl-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 24px; }
+    .tpl { background: var(--card); border: 1px solid var(--hair); border-radius: 16px; overflow: hidden; text-decoration: none; color: inherit; display: block; transition: transform .25s ease, border-color .25s ease; }
+    .tpl:hover { transform: translateY(-5px); border-color: var(--ala-yellow); }
+    .tpl img { width: 100%; display: block; aspect-ratio: 4 / 5; object-fit: cover; background: var(--ala-navy); }
+    .tpl .cap { padding: 16px 18px; display: flex; align-items: center; justify-content: space-between; }
+    .tpl .cap .n { font-weight: 600; font-size: 15px; }
+    .tpl .cap .go { color: var(--ala-yellow); font-size: 14px; }
+    .tpl .cap .d { font-size: 12px; color: #8FA1BC; margin-top: 2px; }
+
+    footer { margin-top: 90px; padding-top: 30px; border-top: 1px solid var(--hair); color: #8093AC; font-size: 14px; line-height: 1.7; }
+    code { font-family: ui-monospace, "SF Mono", Menlo, monospace; background: #0d1d3680; padding: 2px 7px; border-radius: 6px; color: #D7E1F0; font-size: .92em; }
+    a.inline { color: var(--ala-yellow); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header class="rise">
+      <img src="assets/ala-logo-white.png" alt="ALA — Accountability Lens Asia">
+      <h1 class="title">Carousel<span class="sub">Design System</span></h1>
+      <p class="lede">The visual language behind ALA — Accountability Lens Asia — data-journalism carousels.
+        Bold navy stages, golden statistics, chunky display type. Everything here is built for a
+        <strong>1080&times;1350</strong> (4:5) Instagram slide.</p>
+    </header>
+
+    <!-- PALETTE -->
+    <section class="rise" style="animation-delay:.08s">
+      <p class="kicker">01 — Palette</p>
+      <h2 class="sec">Colour</h2>
+      <div class="swatches">
+        <div class="swatch"><div class="chip" style="background:#0D1D36"></div>
+          <div class="meta"><div class="name">Navy</div><div class="token">--ala-navy · #0D1D36</div>
+          <div class="use">Stage background and brand ink.</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#F9CC11"></div>
+          <div class="meta"><div class="name">Yellow</div><div class="token">--ala-yellow · #F9CC11</div>
+          <div class="use">Hero numbers and emphasis words.</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#F5F3EC"></div>
+          <div class="meta"><div class="name">White</div><div class="token">--ala-white · #F5F3EC</div>
+          <div class="use">Supporting text (warm off-white).</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#67604E"></div>
+          <div class="meta"><div class="name">Olive</div><div class="token">--ala-olive · #67604E</div>
+          <div class="use">Secondary / "rest" chart data.</div></div></div>
+        <div class="swatch"><div class="chip" style="background:#1B2B47"></div>
+          <div class="meta"><div class="name">Navy Grid</div><div class="token">--ala-navy-grid · #1B2B47</div>
+          <div class="use">Faint graph-paper texture lines.</div></div></div>
+      </div>
+    </section>
+
+    <!-- TYPE -->
+    <section class="rise" style="animation-delay:.16s">
+      <p class="kicker">02 — Typography</p>
+      <h2 class="sec">Type</h2>
+      <div class="type-grid">
+        <div class="type-card">
+          <div class="role">Display</div>
+          <div class="fname">Lilita One</div>
+          <div class="specimen-display">38% · EGGS</div>
+          <div class="glyphs">A B C D · 0 1 2 3 4 5 6 7 8 9</div>
+          <p class="use" style="color:#A9B6C9;margin-top:18px;font-size:14px;line-height:1.5">
+            Always ALL-CAPS for headlines. Carries every hero number and emphasis word.</p>
+        </div>
+        <div class="type-card">
+          <div class="role">Body</div>
+          <div class="fname">Poppins · 400 / 500 / 600</div>
+          <div class="specimen-body">eggs produced every&nbsp;second</div>
+          <div class="glyphs" style="font-family:var(--ala-font-body)">Aa Bb Cc · 0 1 2 3 4 5 6 7 8 9</div>
+          <p class="use" style="color:#A9B6C9;margin-top:18px;font-size:14px;line-height:1.5">
+            Captions, legends and labels. Mixed-case, medium weight.</p>
+        </div>
+      </div>
+      <ul class="scale">
+        <li><span class="lbl">--ala-size-hero</span><span class="px">230px</span><span class="ex" style="font-size:46px;color:var(--ala-yellow)">19,400</span></li>
+        <li><span class="lbl">--ala-size-headline</span><span class="px">92px</span><span class="ex" style="font-size:38px">MORE THAN A THIRD</span></li>
+        <li><span class="lbl">--ala-size-stat</span><span class="px">160px</span><span class="ex" style="font-size:40px;color:var(--ala-yellow)">+77</span></li>
+        <li><span class="lbl">--ala-size-caption</span><span class="px">42px</span><span class="ex" style="font-size:24px;font-family:var(--ala-font-body)">more than 2024</span></li>
+        <li><span class="lbl">--ala-size-label</span><span class="px">34px</span><span class="ex" style="font-size:20px;font-family:var(--ala-font-body)">Rest of World</span></li>
+      </ul>
+    </section>
+
+    <!-- COMPONENTS -->
+    <section class="rise" style="animation-delay:.24s">
+      <p class="kicker">03 — Components</p>
+      <h2 class="sec">Building blocks</h2>
+      <div class="comp-grid">
+        <div class="comp">
+          <span class="tag">.ala-headline</span>
+          <h3 class="ala-headline" style="font-size:46px;margin:0">
+            <span class="line line--yellow">More than</span>
+            <span class="line line--white">a third</span>
+          </h3>
+        </div>
+        <div class="comp" style="align-items:center;text-align:center">
+          <span class="tag">.ala-hero + .ala-caption</span>
+          <p class="ala-hero" style="font-size:96px">19,400</p>
+          <p class="ala-caption" style="font-size:22px;margin-top:8px">eggs <span class="ala-em-yellow">every second</span></p>
+        </div>
+        <div class="comp" style="align-items:center">
+          <span class="tag">.ala-stat</span>
+          <div class="ala-stat" style="align-items:center">
+            <div class="ala-stat__value" style="font-size:84px">
+              <span class="ala-stat__sign">+</span>77<span class="ala-stat__unit">mil</span>
+            </div>
+            <div class="ala-stat__caption" style="font-size:22px">more than 2024</div>
+          </div>
+        </div>
+        <div class="comp" style="align-items:center">
+          <span class="tag">.ala-donut + .ala-legend</span>
+          <div class="ala-donut-wrap" style="margin:6px 0 16px">
+            <div class="ala-donut" style="--pct:38;--size:150px;--thickness:26px"></div>
+            <div class="ala-donut__center">
+              <span class="ala-donut__value" style="font-size:42px">38%</span>
+            </div>
+          </div>
+          <div class="ala-legend" style="gap:26px;font-size:14px">
+            <div class="ala-legend__item" style="font-size:14px"><span class="ala-legend__swatch swatch--yellow" style="width:18px;height:18px"></span>China</div>
+            <div class="ala-legend__item" style="font-size:14px"><span class="ala-legend__swatch swatch--olive" style="width:18px;height:18px"></span>Rest of World</div>
+          </div>
+        </div>
+        <div class="comp" style="align-items:center;justify-content:center">
+          <span class="tag">.ala-grid</span>
+          <div class="ala-grid" style="opacity:.9"></div>
+          <span style="position:relative;color:#9DB0CC;font-size:14px">Graph-paper texture layer</span>
+        </div>
+        <div class="comp" style="align-items:flex-start;justify-content:flex-end">
+          <span class="tag">.ala-logo</span>
+          <img src="assets/ala-logo-white.png" alt="logo" style="width:120px">
+        </div>
+      </div>
+    </section>
+
+    <!-- TEMPLATES -->
+    <section class="rise" style="animation-delay:.32s">
+      <p class="kicker">04 — Templates</p>
+      <h2 class="sec">Slide templates</h2>
+      <div class="tpl-grid">
+        <a class="tpl" href="templates/cover.html">
+          <img src="exports/cover.png" alt="Cover template">
+          <div class="cap"><div><div class="n">Cover</div><div class="d">Stacked headline</div></div><span class="go">Open&nbsp;&#8599;</span></div>
+        </a>
+        <a class="tpl" href="templates/big-stat.html">
+          <img src="exports/big-stat.png" alt="Big stat template">
+          <div class="cap"><div><div class="n">Big stat</div><div class="d">Hero number + caption</div></div><span class="go">Open&nbsp;&#8599;</span></div>
+        </a>
+        <a class="tpl" href="templates/two-stat.html">
+          <img src="exports/two-stat.png" alt="Two stat template">
+          <div class="cap"><div><div class="n">Two stat</div><div class="d">Two stacked blocks</div></div><span class="go">Open&nbsp;&#8599;</span></div>
+        </a>
+        <a class="tpl" href="templates/chart.html">
+          <img src="exports/chart.png" alt="Chart template">
+          <div class="cap"><div><div class="n">Chart</div><div class="d">Donut + legend</div></div><span class="go">Open&nbsp;&#8599;</span></div>
+        </a>
+      </div>
+    </section>
+
+    <footer>
+      Build a new slide by copying a template in <code>templates/</code> and editing the text.
+      Export every template to a 1080&times;1350 PNG with <code>npm install &amp;&amp; node export.mjs</code>
+      (output lands in <code>exports/</code>). Full guidance in <a class="inline" href="../README.md">README.md</a>.
+    </footer>
+
+  </div>
+</body>
+</html>

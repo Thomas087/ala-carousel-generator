@@ -1,0 +1,10 @@
+import { chromium } from 'playwright';
+const [,, file, out] = process.argv;
+const b = await chromium.launch();
+const p = await b.newPage({ viewport: { width: 1200, height: 1500 }, deviceScaleFactor: 1 });
+const errs = []; p.on('pageerror', e => errs.push(String(e)));
+await p.goto('file://' + file, { waitUntil: 'networkidle' });
+await p.waitForTimeout(600);
+await p.screenshot({ path: out });
+console.log('pageerrors:', errs.length ? errs : 'none');
+await b.close();

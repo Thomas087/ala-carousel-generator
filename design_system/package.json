@@ -1,0 +1,14 @@
+{
+  "name": "ala-carousel-design-system",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "ALA (Accountability Lens Asia) carousel design system + slide templates",
+  "scripts": {
+    "export": "node export.mjs",
+    "export:slider": "node export-slider.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.0.0"
+  }
+}

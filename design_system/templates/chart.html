@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALA — Chart slide template</title>
+  <link rel="stylesheet" href="../css/design-system.css">
+</head>
+<body>
+  <!-- CHART SLIDE
+       Headline on top, donut with a centered value, legend at the bottom.
+       Set the yellow share with style="--pct: NN" on .ala-donut. -->
+  <div class="ala-stage">
+    <div class="ala-slide">
+
+      <div class="ala-slide__body ala-x-center" style="justify-content: space-between;">
+
+        <h2 class="ala-headline" style="font-size: 64px; white-space: nowrap;">
+          <span class="line line--yellow">More than a third</span>
+          <span class="line line--white">of all eggs on earth</span>
+        </h2>
+
+        <div class="ala-donut-wrap">
+          <div class="ala-donut" style="--pct: 38;"></div>
+          <div class="ala-donut__center">
+            <span class="ala-donut__value">38%</span>
+            <span class="ala-donut__label">China</span>
+          </div>
+        </div>
+
+        <div class="ala-legend">
+          <div class="ala-legend__item">
+            <span class="ala-legend__swatch swatch--yellow"></span>China
+          </div>
+          <div class="ala-legend__item">
+            <span class="ala-legend__swatch swatch--olive"></span>Rest of World
+          </div>
+        </div>
+
+      </div>
+
+      <img class="ala-logo" src="../assets/ala-logo-white.png" alt="ALA — Accountability Lens Asia">
+    </div>
+  </div>
+</body>
+</html>
