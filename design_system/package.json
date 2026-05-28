@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "description": "ALA (Accountability Lens Asia) carousel design system + slide templates",
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
     "export": "node export.mjs",
     "export:slider": "node export-slider.mjs"

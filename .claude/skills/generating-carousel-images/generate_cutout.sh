@@ -40,7 +40,19 @@ OPENAI_IMAGE_MODEL="${OPENAI_IMAGE_MODEL:-gpt-image-2}" \
 OPENAI_IMAGE_BACKGROUND=opaque \
 "$SCRIPT_DIR/generate_image.sh" "$green" "$prompt $GREEN" "$size" >/dev/null
 
-# 2) key the green out to a transparent PNG
+# 2) key the green out to a transparent PNG.
+# Prefer the repo's .venv (created by `npm run setup:python`) so numpy/Pillow
+# resolve without polluting system Python; fall back to plain python3 otherwise.
+py="python3"
+dir="$SCRIPT_DIR"
+while [[ "$dir" != "/" ]]; do
+  if [[ -x "$dir/.venv/bin/python" ]]; then
+    py="$dir/.venv/bin/python"
+    break
+  fi
+  dir="$(dirname "$dir")"
+done
+
 mkdir -p "$(dirname "$output")"
-python3 "$SCRIPT_DIR/chroma_key.py" "$green" "$output" \
+"$py" "$SCRIPT_DIR/chroma_key.py" "$green" "$output" \
   --lo "${KEY_LO:-40}" --hi "${KEY_HI:-120}"

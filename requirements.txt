@@ -1,0 +1,10 @@
+# Python dependencies for the carousel-image pipeline.
+# Used by .claude/skills/generating-carousel-images/chroma_key.py to turn
+# green-screen images from gpt-image-2 into transparent-PNG cut-outs.
+#
+# Install into the project-local venv via:  npm run setup:python
+# (which creates .venv/ at the repo root and installs into it). generate_cutout.sh
+# auto-discovers .venv/bin/python by walking up from the script's location.
+
+numpy>=1.24
+Pillow>=10.0

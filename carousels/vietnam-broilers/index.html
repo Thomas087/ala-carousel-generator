@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ALA — Vietnam broilers</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ala-navy:#0D1D36;
+  --ala-navy-grid:#1B2B47;
+  --ala-yellow:#F9CC11;
+  --ala-olive:#67604E;
+  --ala-white:#F5F3EC;
+  --font-display:'Lilita One',system-ui,sans-serif;
+  --font-body:'Poppins',system-ui,sans-serif;
+  --canvas-w:1080px;
+  --canvas-h:1350px;
+  --margin:84px;
+}
+*{box-sizing:border-box;}
+html,body{margin:0;height:100%;}
+body{
+  background:#05080f;font-family:var(--font-body);color:var(--ala-white);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100vh;gap:26px;padding:24px;
+}
+
+/* ---------- slider chrome ---------- */
+.frame-box{position:relative;overflow:hidden;border-radius:26px;
+  box-shadow:0 40px 120px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04);}
+.scaler{width:var(--canvas-w);height:var(--canvas-h);transform-origin:top left;}
+.track{display:flex;height:100%;transition:transform .55s cubic-bezier(.7,0,.18,1);will-change:transform;}
+
+/* ---------- one slide = export-ready 1080×1350 ---------- */
+.slide{
+  flex:0 0 var(--canvas-w);width:var(--canvas-w);height:var(--canvas-h);
+  position:relative;
+  background:var(--ala-navy); /* FLAT navy = exact match to the logo's baked navy */
+  overflow:hidden;
+}
+.grid{position:absolute;inset:0;pointer-events:none;opacity:.5;
+  background-image:
+    linear-gradient(var(--ala-navy-grid) 1.5px,transparent 1.5px),
+    linear-gradient(90deg,var(--ala-navy-grid) 1.5px,transparent 1.5px);
+  background-size:120px 120px;background-position:center;}
+/* soft glow grounds the cut-out subject. Lives on the SLIDE (not the image
+   slot) so its radial fade dissolves into the navy, instead of being clipped
+   at the slot's bottom edge — that clip left a visible seam mid-slide. */
+.slide::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(55% 40% at 50% 80%,rgba(249,204,17,.15),transparent 72%);}
+.slide__inner{position:absolute;inset:var(--margin);display:flex;flex-direction:column;z-index:2;}
+
+/* copy block */
+.kicker{font-family:var(--font-display);font-size:30px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--ala-yellow);margin:0 0 26px;display:flex;align-items:center;gap:16px;}
+.kicker::before{content:"";width:54px;height:6px;border-radius:3px;background:var(--ala-yellow);}
+.stat{font-family:var(--font-display);color:var(--ala-yellow);line-height:.82;margin:0;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:0 18px;letter-spacing:-1px;}
+.stat__num{font-size:230px;}
+.stat__unit{font-family:var(--font-display);font-size:84px;color:var(--ala-white);text-transform:uppercase;}
+.stat--sm .stat__num{font-size:172px;}
+.stat--sm .stat__unit{font-size:64px;}
+.caption{font-family:var(--font-body);font-weight:500;font-size:46px;line-height:1.16;
+  color:var(--ala-white);margin:24px 0 0;max-width:880px;}
+.caption em{color:var(--ala-yellow);font-style:normal;}
+.sub{font-family:var(--font-body);font-weight:400;font-size:30px;line-height:1.32;
+  color:rgba(245,243,236,.78);margin:22px 0 0;max-width:900px;}
+.sub strong{color:var(--ala-white);font-weight:600;}
+.cta{display:inline-flex;align-items:center;gap:14px;align-self:flex-start;margin-top:30px;
+  background:var(--ala-yellow);color:var(--ala-navy);font-family:var(--font-display);font-size:34px;
+  padding:18px 34px;border-radius:999px;}
+
+/* media / transparent-PNG slot */
+.slide__media{position:relative;flex:1;min-height:0;display:flex;align-items:flex-end;justify-content:center;margin-top:18px;}
+.img-slot{position:relative;width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;}
+.slot-img{position:relative;max-width:100%;max-height:100%;object-fit:contain;object-position:bottom center;
+  filter:drop-shadow(0 26px 40px rgba(0,0,0,.55));}
+.slot-ph{position:absolute;inset:6% 4% 0 4%;border:3px dashed rgba(245,243,236,.32);border-radius:20px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;
+  padding:30px;color:rgba(245,243,236,.62);}
+.slot-ph .ph-tag{font-family:var(--font-display);font-size:26px;letter-spacing:1px;color:var(--ala-yellow);text-transform:uppercase;}
+.slot-ph .ph-desc{font-size:30px;font-weight:500;color:var(--ala-white);max-width:560px;line-height:1.25;}
+.slot-ph .ph-file{font-size:22px;font-family:monospace;color:rgba(245,243,236,.55);}
+.slot-ph .ph-note{font-size:20px;letter-spacing:1px;text-transform:uppercase;color:rgba(245,243,236,.45);}
+
+/* footer: logo (bottom-left) + source (bottom-right) */
+.slide__foot{position:absolute;left:var(--margin);right:var(--margin);bottom:54px;
+  display:flex;align-items:flex-end;justify-content:space-between;gap:30px;z-index:3;}
+.ala-logo{width:200px;height:auto;display:block;}
+.source{font-family:var(--font-body);font-weight:400;font-size:23px;color:rgba(245,243,236,.55);
+  text-align:right;margin:0;max-width:620px;line-height:1.3;}
+
+/* ---------- controls ---------- */
+.controls{display:flex;align-items:center;gap:22px;}
+.nav-btn{width:54px;height:54px;border-radius:50%;border:1px solid rgba(245,243,236,.25);
+  background:rgba(245,243,236,.06);color:var(--ala-white);font-size:22px;cursor:pointer;
+  display:grid;place-items:center;transition:.2s;}
+.nav-btn:hover{background:var(--ala-yellow);color:var(--ala-navy);border-color:var(--ala-yellow);}
+.nav-btn:disabled{opacity:.28;cursor:default;background:rgba(245,243,236,.06);color:var(--ala-white);border-color:rgba(245,243,236,.25);}
+.dots{display:flex;gap:12px;}
+.dot{width:11px;height:11px;border-radius:50%;border:none;padding:0;cursor:pointer;background:rgba(245,243,236,.28);transition:.2s;}
+.dot.is-active{background:var(--ala-yellow);transform:scale(1.25);}
+.counter{font-size:14px;letter-spacing:2px;color:rgba(245,243,236,.5);text-transform:uppercase;font-weight:600;}
+.hint{font-size:13px;letter-spacing:2px;color:rgba(245,243,236,.35);text-transform:uppercase;}
+</style>
+</head>
+<body>
+
+  <div class="frame-box" id="frameBox">
+    <div class="scaler" id="scaler">
+      <div class="track" id="track">
+
+        <!-- ============ SLIDE 1 — scale (anchor) ============ -->
+        <section class="slide">
+          <div class="grid"></div>
+          <div class="slide__inner">
+            <p class="kicker">01 — Vietnam, 2024</p>
+            <h2 class="stat"><span class="stat__num">687</span><span class="stat__unit">million</span></h2>
+            <p class="caption">chickens were slaughtered in Vietnam in 2024 — <em>about 22 every second.</em></p>
+            <div class="slide__media">
+              <div class="img-slot">
+                <div class="slot-ph">
+                  <span class="ph-tag">AI image</span>
+                  <span class="ph-desc">A bold flat graphic illustration of a single hen</span>
+                  <span class="ph-file">images/slide-1-chicken.png</span>
+                  <span class="ph-note">transparent PNG</span>
+                </div>
+                <img class="slot-img" alt="A bold graphic illustration of a hen"
+                     src="images/slide-1-chicken.png"
+                     onload="this.previousElementSibling.style.display='none'"
+                     onerror="this.style.display='none'">
+              </div>
+            </div>
+          </div>
+          <div class="slide__foot">
+            <img class="ala-logo" src="../../assets/ala-logo.png" alt="ALA — Accountability Lens Asia">
+            <p class="source">Source: FAO / FAOSTAT, 2024</p>
+          </div>
+        </section>
+
+        <!-- ============ SLIDE 2 — the short life ============ -->
+        <section class="slide">
+          <div class="grid"></div>
+          <div class="slide__inner">
+            <p class="kicker">02 — A six-week life</p>
+            <h2 class="stat"><span class="stat__num">42</span><span class="stat__unit">days</span></h2>
+            <p class="caption">is all most meat chickens get. Killed at six weeks old — <em>though a chicken can live up to 10 years.</em></p>
+            <div class="slide__media">
+              <div class="img-slot">
+                <div class="slot-ph">
+                  <span class="ph-tag">AI image</span>
+                  <span class="ph-desc">A just-snuffed candle with a thin curl of smoke</span>
+                  <span class="ph-file">images/slide-2-candle.png</span>
+                  <span class="ph-note">transparent PNG</span>
+                </div>
+                <img class="slot-img" alt="A just-snuffed candle with a curl of smoke"
+                     src="images/slide-2-candle.png"
+                     onload="this.previousElementSibling.style.display='none'"
+                     onerror="this.style.display='none'">
+              </div>
+            </div>
+          </div>
+          <div class="slide__foot">
+            <img class="ala-logo" src="../../assets/ala-logo.png" alt="ALA — Accountability Lens Asia">
+            <p class="source">Source: The Humane League · industrial-broiler standard</p>
+          </div>
+        </section>
+
+        <!-- ============ SLIDE 3 — engineered growth ============ -->
+        <section class="slide">
+          <div class="grid"></div>
+          <div class="slide__inner">
+            <p class="kicker">03 — Built to grow</p>
+            <h2 class="stat stat--sm"><span class="stat__num">400%</span><span class="stat__unit">faster</span></h2>
+            <p class="caption">The breeds raised on industrial farms grow <em>4 times faster</em> than those of 1957 — bred for weight their hearts and legs can't keep up with.</p>
+            <div class="slide__media">
+              <div class="img-slot">
+                <div class="slot-ph">
+                  <span class="ph-tag">AI image</span>
+                  <span class="ph-desc">A heavy-duty metal weighing scale, dial tilted high</span>
+                  <span class="ph-file">images/slide-3-scale.png</span>
+                  <span class="ph-note">transparent PNG</span>
+                </div>
+                <img class="slot-img" alt="A metal weighing scale"
+                     src="images/slide-3-scale.png"
+                     onload="this.previousElementSibling.style.display='none'"
+                     onerror="this.style.display='none'">
+              </div>
+            </div>
+          </div>
+          <div class="slide__foot">
+            <img class="ala-logo" src="../../assets/ala-logo.png" alt="ALA — Accountability Lens Asia">
+            <p class="source">Source: Zuidhof et al., Poultry Science, 2014</p>
+          </div>
+        </section>
+
+        <!-- ============ SLIDE 4 — rising trend + CTA ============ -->
+        <section class="slide">
+          <div class="grid"></div>
+          <div class="slide__inner">
+            <p class="kicker">04 — And rising</p>
+            <h2 class="stat stat--sm"><span class="stat__num">+77%</span></h2>
+            <p class="caption">And it keeps climbing — from <em>389 million</em> birds a year in 2015 to <em>687 million</em> in 2024. Nothing about their lives has changed.</p>
+            <span class="cta">→ Follow @ALA to hold the industry to account</span>
+            <div class="slide__media">
+              <div class="img-slot">
+                <div class="slot-ph">
+                  <span class="ph-tag">AI image</span>
+                  <span class="ph-desc">An ascending bar chart climbing to the right</span>
+                  <span class="ph-file">images/slide-4-chart.png</span>
+                  <span class="ph-note">transparent PNG</span>
+                </div>
+                <img class="slot-img" alt="An ascending bar chart"
+                     src="images/slide-4-chart.png"
+                     onload="this.previousElementSibling.style.display='none'"
+                     onerror="this.style.display='none'">
+              </div>
+            </div>
+          </div>
+          <div class="slide__foot">
+            <img class="ala-logo" src="../../assets/ala-logo.png" alt="ALA — Accountability Lens Asia">
+            <p class="source">Source: FAO / FAOSTAT, 2015–2024</p>
+          </div>
+        </section>
+
+      </div>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button class="nav-btn" id="prev" aria-label="Previous slide">‹</button>
+    <div class="dots" id="dots"></div>
+    <button class="nav-btn" id="next" aria-label="Next slide">›</button>
+    <span class="counter" id="counter">1 / 1</span>
+  </div>
+  <span class="hint">← → arrow keys · swipe</span>
+
+<script>
+(function(){
+  const SLIDE_W = 1080, SLIDE_H = 1350;
+  const track = document.getElementById('track');
+  const slides = [...track.children];
+  const n = slides.length;
+  const dotsWrap = document.getElementById('dots');
+  const prevBtn = document.getElementById('prev');
+  const nextBtn = document.getElementById('next');
+  const counter = document.getElementById('counter');
+  const box = document.getElementById('frameBox');
+  const scaler = document.getElementById('scaler');
+  let i = 0;
+
+  slides.forEach((_, k) => {
+    const b = document.createElement('button');
+    b.className = 'dot'; b.setAttribute('aria-label', 'Go to slide ' + (k+1));
+    b.addEventListener('click', () => go(k));
+    dotsWrap.appendChild(b);
+  });
+  const dots = [...dotsWrap.children];
+
+  function go(k){
+    i = Math.max(0, Math.min(n-1, k));
+    track.style.transform = 'translateX(' + (-i * SLIDE_W) + 'px)';
+    dots.forEach((d,x) => d.classList.toggle('is-active', x===i));
+    counter.textContent = (i+1) + ' / ' + n;
+    prevBtn.disabled = i===0;
+    nextBtn.disabled = i===n-1;
+  }
+
+  // Fit the 1080×1350 frame to the window, reserving the real chrome height
+  // (controls + hint + body padding/gaps) so the in-slide logo + source row
+  // are never clipped by the viewport.
+  const controlsEl = document.querySelector('.controls');
+  const hintEl = document.querySelector('.hint');
+  function fit(){
+    const cs = getComputedStyle(document.body);
+    const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+    const gap  = parseFloat(cs.rowGap || cs.gap) || 0;
+    const chromeH = padY + (gap * 2) + controlsEl.offsetHeight + hintEl.offsetHeight + 8;
+    const availW = window.innerWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    const availH = window.innerHeight - chromeH;
+    const scale = Math.max(0.1, Math.min(availW / SLIDE_W, availH / SLIDE_H, 1));
+    scaler.style.transform = 'scale(' + scale + ')';
+    box.style.width  = (SLIDE_W * scale) + 'px';
+    box.style.height = (SLIDE_H * scale) + 'px';
+  }
+
+  prevBtn.addEventListener('click', () => go(i-1));
+  nextBtn.addEventListener('click', () => go(i+1));
+  window.addEventListener('keydown', e => {
+    if(e.key === 'ArrowRight') go(i+1);
+    if(e.key === 'ArrowLeft')  go(i-1);
+  });
+
+  let x0 = null;
+  box.addEventListener('touchstart', e => x0 = e.touches[0].clientX, {passive:true});
+  box.addEventListener('touchend', e => {
+    if(x0 === null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if(Math.abs(dx) > 40) go(i + (dx < 0 ? 1 : -1));
+    x0 = null;
+  });
+
+  window.addEventListener('resize', fit);
+  fit(); go(0);
+})();
+</script>
+</body>
+</html>

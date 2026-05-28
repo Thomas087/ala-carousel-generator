@@ -4,7 +4,11 @@
 
 # Dependencies
 node_modules/
+.venv/
 
 # OS / editor cruft
 .DS_Store
 *.log
+
+# Local verify / scratch artefacts from ad-hoc Playwright checks
+_verify_*

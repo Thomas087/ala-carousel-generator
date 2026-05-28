@@ -1,0 +1,17 @@
+{
+  "name": "ala-carousel-generator",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ALA (Accountability Lens Asia) carousel generator — root scripts to install all dependencies (Node, Playwright Chromium, Python) needed by the design system and the image-generation pipeline.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "setup": "npm run setup:node && npm run setup:playwright && npm run setup:python",
+    "setup:node": "npm --prefix design_system install",
+    "setup:playwright": "npm --prefix design_system exec -- playwright install chromium",
+    "setup:python": "python3 -m venv .venv && .venv/bin/python -m pip install --upgrade pip && .venv/bin/python -m pip install -r requirements.txt",
+    "export": "npm --prefix design_system run export",
+    "export:slider": "npm --prefix design_system run export:slider"
+  }
+}
