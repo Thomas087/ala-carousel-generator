@@ -9,31 +9,37 @@ description: Use when the user wants a complete ALA Instagram carousel produced 
 
 Orchestrate the four carousel skills into one run: **wording → HTML slider → images → exported PNG + PDF.** This skill owns only the *sequencing and the one branch*; each stage's real work (and its own verification) belongs to its sub-skill — invoke them, don't reimplement them.
 
-Core principle: **ask one question first (supply wording, or generate it?), then run the pipeline straight through to the export without inventing your own checkpoints.**
+Core principle: **ask one question first (supply wording, or generate it?) with "Generate it for me" as the preselected default, then run the pipeline straight through to the export without inventing your own checkpoints.**
 
 ## The one decision — ask it BEFORE anything else
 
 ```dot
 digraph g {
   "User wants a full carousel" [shape=box];
-  "ASK: provide wording, or generate it?" [shape=diamond];
+  "ASK: provide wording, or generate it? (default: generate)" [shape=diamond];
   "User provides wording" [shape=box];
   "Generate wording" [shape=box];
   "build → images → export" [shape=box];
 
-  "User wants a full carousel" -> "ASK: provide wording, or generate it?";
-  "ASK: provide wording, or generate it?" -> "User provides wording" [label="provide"];
-  "ASK: provide wording, or generate it?" -> "Generate wording" [label="generate"];
+  "User wants a full carousel" -> "ASK: provide wording, or generate it? (default: generate)";
+  "ASK: provide wording, or generate it? (default: generate)" -> "User provides wording" [label="provide"];
+  "ASK: provide wording, or generate it? (default: generate)" -> "Generate wording" [label="generate (default)"];
   "User provides wording" -> "build → images → export";
   "Generate wording" -> "build → images → export";
 }
 ```
 
-Do **not** start researching, building, or generating until you've asked. Ask plainly, e.g.: *"Do you want to give me the slide wording yourself, or should I generate it?"*
+Do **not** start researching, building, or generating until you've asked. Ask via the `AskUserQuestion` tool with **"Generate it for me" as the first (recommended) option** so it is preselected. For example:
+
+- Question: *"Should I generate the slide wording, or will you provide it?"*
+- Header: `Wording`
+- Options (in this order):
+  1. **Generate it for me (Recommended)** — invoke the concept skill to research and draft the slides.
+  2. **I'll provide the wording** — paste slide copy (stat + caption + source per slide).
 
 ## Workflow
 
-1. **[ASK] Supply or generate?** Ask the question above. Nothing else first.
+1. **[ASK] Supply or generate?** Ask via `AskUserQuestion` with "Generate it for me" listed first as the recommended/default option. Nothing else first.
 2. **Get the wording:**
    - **Provide path** → give the user room to paste their slide copy (stat + caption + source per slide). Take it as the fixed input. **Skip the concept skill entirely.** This path is topic-agnostic — the wording need not be about chicken farming.
    - **Generate path** → invoke **`chicken-farming-carousel-concept`**. It runs its *own* internal asks (country, then anchor stat, then final-wording approval). Let those happen — they are expected, not checkpoints you added. Use its finalized wording.

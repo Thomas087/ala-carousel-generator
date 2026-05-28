@@ -32,7 +32,8 @@ A flat, obviously-graphic pictogram/silhouette is acceptable; a realistic or pho
 4. **Choose one animal-free image concept per slide** (see hard rule): scale → the thing at scale; confinement → an empty cage / the A4 sheet; product → eggs / a carton; action → a basket / shelf.
 5. **Write one `.md` spec per image** from `image-spec-template.md` into `images/`. Filenames must match each `<img src>` exactly.
 6. **Keep each source to one short line**; keep the logo bottom-left (see below).
-7. **Verify by rendering** (see Verify) before claiming done.
+7. **Review every image concept** across the whole deck (see Image-concept review) — animal-safe, on-point, simple to AI-generate, cut-out-friendly, and diversified. Fix the `.md` spec **and** the slide's placeholder label + `<img alt>` before moving on.
+8. **Verify by rendering** (see Verify) before claiming done.
 
 ## Design tokens (match the design system)
 
@@ -71,6 +72,18 @@ Copy `image-spec-template.md`; it already encodes the project-standard generatio
 
 **Generating the PNGs is a separate step:** after the slider + specs exist, use the **generating-carousel-images** skill to fill `images/`.
 
+## Image-concept review (post-HTML)
+
+Once the HTML and every `.md` spec exist, walk the whole deck **before** handing off to image generation and check each slide's chosen image against all five criteria. If any check fails, revise the `.md` spec **and** the matching `<img alt>` + `.slot-ph` label in `index.html`. The cheap fix is here, not after the PNG is rendered.
+
+1. **Animal-safe.** No live animal in farming conditions, no suffering. (Hard rule — see above. The cage, the carton, the A4 sheet — never the bird.)
+2. **On-point and concrete.** The object should illustrate the slide's main number/claim in one Instagram-scroll glance. Prefer the literal object over the metaphor: "lifespan" → the empty cage, not a clock; "intelligence" → a mirror or a puzzle the bird uses, not a brain; "scale" → a stack of cartons, not an infinity symbol. If a viewer needs the caption to decode the image, swap it.
+3. **Simple to AI-generate.** Pick subjects that gpt-image-2 renders reliably. Avoid: flocks or any "many small repeating things", legible small text/labels on the object, hands holding the object, intricate machinery, busy multi-element scenes, accurate brand packaging. One clean iconic object beats a clever composition.
+4. **Cut-out friendly (transparent PNG).** A single, clearly bounded object that makes sense floating in space on navy. Avoid: environments ("a kitchen with eggs" → just the carton), objects that only read in context (a hand pointing at nothing), translucent/wispy subjects (smoke, water splash) that key poorly. The PNG is a silhouette, not a scene.
+5. **Diversified across the deck.** Don't repeat the same object on multiple slides. When two beats naturally share a subject, vary the form (whole eggs → cracked egg → carton → tray; cage → cage door → empty barn exterior → A4 floor area) so the carousel doesn't look like the same picture six times. Aim for a visibly different silhouette on every slide.
+
+If a concept fails 2, 3, or 4, swap to a more concrete / simpler / more isolated alternative. If it fails 5, pick a related-but-different form. Re-render after fixing to confirm the placeholder labels still match the new spec filenames.
+
 ## Verify (before claiming done)
 
 Render the page headless (Playwright / Chromium) and confirm: every slide shows its number-first headline and placeholder; the logo (bottom-left) and source (bottom-right) are fully visible and **not cropped**, including at a short window; nav updates the counter. The only expected console errors are the not-yet-generated PNGs (handled by `onerror`). Delete any throwaway render script afterward.
@@ -81,6 +94,10 @@ Render the page headless (Playwright / Chromium) and confirm: every slide shows 
 |---|---|
 | Photoreal hen in a cage / a suffering animal | Animal-free symbolic object; never depict suffering |
 | Realistic animal "because it's more powerful" | More powerful = more dangerous if debunked. Don't. |
+| Abstract metaphor (clock, brain, scales, infinity loop) | Show the literal object (cage, A4 sheet, carton, stack of cartons) |
+| Busy multi-element scene or a flock of small things | One clean, isolated, iconic object |
+| Object that only reads inside a scene (a hand, a kitchen) | Pick a subject that reads on its own as a cut-out on navy |
+| Same image concept reused across slides | Vary the form across the deck so each silhouette is distinct |
 | PNG with baked shadow/background | Cut-out only; the slide adds the glow + shadow |
 | No placeholder → broken slider before images exist | Use the `.slot-ph` + `onload`/`onerror` pattern |
 | Long source line wrapping / overlapping the bottom | One short line per slide |
