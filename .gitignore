@@ -12,3 +12,6 @@ node_modules/
 
 # Local verify / scratch artefacts from ad-hoc Playwright checks
 _verify_*
+
+# Generated carousels (built locally, not published in the repo)
+carousels/
